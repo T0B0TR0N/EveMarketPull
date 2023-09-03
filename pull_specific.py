@@ -1,0 +1,25 @@
+import requests 
+import pandas as pd
+from arcticdb import Arctic
+
+ac = Arctic("lmdb://C:\ArcticDB")
+
+lib = ac["market_data"]
+
+url = "https://esi.evetech.net/latest/"
+
+type_id = 439
+
+market_endpoint = url + "markets/10000002/history/?type_id={}".format(type_id)
+
+response = requests.get(market_endpoint)
+
+market_data = response.json()
+
+df = pd.DataFrame(market_data)
+
+
+
+lib.write("1MN_Afterburner_I", df)
+
+lib.read("1MN_Afterburner_I").data
